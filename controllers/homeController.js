@@ -216,7 +216,10 @@ const getRides = async (req,res) =>{
   }
 }
 
-const book = async = (req, res) => {
+const book = async (req, res) => {
+  try {
+    
+  
   let cycleUuid = req.body.cycleUuid;
   let cycle = await Cycle.findOne({uuid:cycleUuid});
   if(cycle) {
@@ -238,6 +241,13 @@ const book = async = (req, res) => {
     data: {},
   });
   }
+}} catch (error) {
+  res.json({
+    status: false,
+    message: "server error",
+    errors: [error],
+    data: {},
+  });
 }
 }
 
