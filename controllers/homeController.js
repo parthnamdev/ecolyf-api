@@ -76,6 +76,7 @@ await ride.save();
 }
 
 const getUser = async (req,res) => {
+  console.log(req.user);
   res.json({
     status: true,
     message: "data",
@@ -215,6 +216,69 @@ const getRides = async (req,res) =>{
   }
 }
 
+const getStats = async (req, res) => {
+  try {
+    
+  
+  let uuid = req.user.uuid;
+  let rides = await Ride.find({userUuid: uuid}).countDocuments().exec();
+  
+  // if(rides.length > 0) {
+  //   for (let index = 0; index < rides.length; index++) {
+  //     const element = rides[index];
+  //     no_of_rides += 1;
+  //     kms += element.distance;
+      
+  //     if(index == rides.length - 1) {
+  //       console.log(no_of_rides);
+  //     console.log(kms);
+  //       res.json({
+  //         status: true,
+  //         message: "data",
+  //         errors: [],
+  //         data: {
+  //           rides: no_of_rides,
+  //           kms: kms
+  //         },
+  //       });
+  //     }
+  //   }
+  // } else {
+  //   console.log(no_of_rides);
+  //     console.log(kms);
+  //     console.log('else');
+  //   res.json({
+  //     status: true,
+  //     message: "data",
+  //     errors: [],
+  //     data: {
+  //       rides: no_of_rides,
+  //       kms: kms
+  //     },
+  //   });
+  // }
+  console.log('rides');
+  console.log(rides);
+  res.json({
+    status: true,
+    message: "data",
+    errors: [],
+    data: {
+      rides: rides,
+    },
+  });
+
+} catch (error) {
+  console.log(error);
+  res.json({
+    status: false,
+    message: "unable to fetch data",
+    errors: [],
+    data: {},
+  });
+}
+}
+
 module.exports = {
     load,
     getAvailabilities,
@@ -222,5 +286,7 @@ module.exports = {
     addCycle,
     addStand,
     prebook,
-    getRides
+    getRides, 
+    getStats,
+
   };

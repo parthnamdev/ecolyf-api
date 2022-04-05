@@ -49,12 +49,15 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
+    // console.log('1');
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
+    // console.log('2');
     const token = await user.generateAuthToken();
     // res.send({ user, token });
+    // console.log('3');
     res.json({
         status: true,
         message: "You are logged in !",
@@ -66,10 +69,11 @@ const login = async (req, res) => {
     })
   } catch (error) {
     // res.send(error);
+    // console.log(error);
     res.json({
         status: false,
         message: "Unable to access your account",
-        errors:error,
+        errors:[error],
         data: {}
     })
   }
