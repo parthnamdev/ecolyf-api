@@ -12,5 +12,6 @@ router.post('/addStand',isAdmin, homeController.addStand);
 router.post('/prebook', auth, homeController.prebook);
 router.get('/getCycleData/:name',auth, homeController.getAvailabilities);
 router.get('/getStats', auth, homeController.getStats);
+router.post('/book', auth, homeController.book);
 
 module.exports = router;

@@ -216,6 +216,31 @@ const getRides = async (req,res) =>{
   }
 }
 
+const book = async = (req, res) => {
+  let cycleUuid = req.body.cycleUuid;
+  let cycle = await Cycle.findOne({uuid:cycleUuid});
+  if(cycle) {
+  if(cycle.isOccupied){
+    res.json({
+      status: false,
+      message: "cycle is already occupied",
+      errors: [],
+      data: {},
+    });
+  } else {
+  cycle.isOccupied = true;
+  cycle.currentlyUsedBy = req.user.uuid;
+  await cycle.save();
+  res.json({
+    status: true,
+    message: "cycle booked",
+    errors: [],
+    data: {},
+  });
+  }
+}
+}
+
 const getStats = async (req, res) => {
   try {
     
@@ -288,5 +313,5 @@ module.exports = {
     prebook,
     getRides, 
     getStats,
-
+    book
   };
