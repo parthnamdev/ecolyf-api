@@ -223,25 +223,36 @@ const book = async (req, res) => {
   let cycleUuid = req.body.cycleUuid;
   let cycle = await Cycle.findOne({uuid:cycleUuid});
   if(cycle) {
-  if(cycle.isOccupied){
+
+    if(cycle.isOccupied){
+      res.json({
+        status: false,
+        message: "cycle is already occupied",
+        errors: [],
+        data: {},
+      });
+
+    } else {
+
+      cycle.isOccupied = true;
+      cycle.currentlyUsedBy = req.user.uuid;
+      await cycle.save();
+      res.json({
+        status: true,
+        message: "cycle booked",
+        errors: [],
+        data: {},
+      });
+    }
+  } else {
     res.json({
       status: false,
-      message: "cycle is already occupied",
-      errors: [],
+      message: "cycle not found",
+      errors: [error],
       data: {},
     });
-  } else {
-  cycle.isOccupied = true;
-  cycle.currentlyUsedBy = req.user.uuid;
-  await cycle.save();
-  res.json({
-    status: true,
-    message: "cycle booked",
-    errors: [],
-    data: {},
-  });
   }
-}} catch (error) {
+} catch (error) {
   res.json({
     status: false,
     message: "server error",
